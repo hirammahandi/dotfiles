@@ -1,0 +1,8 @@
+{
+  "name": "quiet-shell",
+  "version": "0.1.0",
+  "description": "Draws each Bash/PowerShell call as one readable line (its description) and hides the command and its output; ctrl+o still shows everything.",
+  "author": {
+    "name": "Hiram Hernandez"
+  }
+}

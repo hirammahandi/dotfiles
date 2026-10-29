@@ -1,0 +1,14 @@
+{
+  "name": "hirammahandi",
+  "owner": {
+    "name": "Hiram Hernandez"
+  },
+  "description": "Claude Code plugins and mods from hirammahandi's dotfiles.",
+  "plugins": [
+    {
+      "name": "quiet-shell",
+      "source": "./plugins/quiet-shell",
+      "description": "Draws each Bash/PowerShell call as one readable line (its description) and hides the command and its output; ctrl+o still shows everything."
+    }
+  ]
+}

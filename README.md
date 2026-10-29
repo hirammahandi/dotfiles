@@ -8,6 +8,10 @@ The repo follows the [GNU Stow](https://www.gnu.org/software/stow/) convention: 
 
 ```
 dotfiles/
+├── .claude-plugin/
+│   └── marketplace.json            # makes the repo a Claude Code plugin marketplace
+├── plugins/                        # Claude Code plugins, installed with /plugin (not a Stow package)
+│   └── quiet-shell/
 ├── install.sh                      # symlinks the skills into ~/.claude/skills
 └── claude/                         # package: Claude Code
     └── .claude/
@@ -18,6 +22,37 @@ dotfiles/
                 ├── decision-matrix.md
                 └── output-template.md
 ```
+
+## Plugins
+
+The repo is also a [Claude Code plugin marketplace](https://code.claude.com/docs/en/plugin-marketplaces): `.claude-plugin/marketplace.json` lists the plugins under `plugins/`.
+
+### quiet-shell
+
+A [mod](https://code.claude.com/docs/en/plugins/mods/overview) that keeps the transcript clean. Every Bash or PowerShell call (shell commands, Python, Node, npm, git...) is drawn as one readable line, the call's `description`, instead of the command and the first lines of its output:
+
+```
+● Find Calendly links in the marketing pages
+● Count open cards on the board (en segundo plano)
+```
+
+The dot shows the state: green when done, grey with `…` while it runs, red with `(falló)` when it errored, yellow with `(interrumpido)` when it was cut. A call with no `description` gets a label from the command it runs (`Ejecutando un script de Python`, `Buscando en el código`, ...). `ctrl+o` still shows every command and its full output, and Claude Code's own grouped lines (`Ran 2 shell commands`) are left as they are. It only changes the terminal; the desktop app and VS Code draw as before.
+
+#### Install
+
+At the prompt of a Claude Code terminal session (2.1.275 or later):
+
+```
+/plugin install quiet-shell --marketplace hirammahandi/dotfiles
+```
+
+Answer `y` to add the marketplace, then pick the user scope so it loads in every session. From a shell: `claude plugin install quiet-shell --marketplace hirammahandi/dotfiles`. In the desktop app, click + next to the prompt box, then Plugins, Add marketplace with `hirammahandi/dotfiles`, then Add plugin.
+
+Update with `claude plugin update quiet-shell@hirammahandi` and then `/reload-plugins`; remove with `claude plugin uninstall quiet-shell@hirammahandi`.
+
+#### Develop
+
+`claude --plugin-dir ~/dotfiles/plugins/quiet-shell` loads the working copy for one session and reloads it on save. `claude plugin validate plugins/quiet-shell` checks it and `claude plugin test plugins/quiet-shell` runs its tests.
 
 ## Skills
 
