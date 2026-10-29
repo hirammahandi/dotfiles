@@ -36,7 +36,7 @@ A [mod](https://code.claude.com/docs/en/plugins/mods/overview) that keeps the tr
 ● Count open cards on the board (en segundo plano)
 ```
 
-The dot shows the state: green when done, grey with `…` while it runs, red with `(falló)` when it errored, yellow with `(interrumpido)` when it was cut. A call with no `description` gets a label from the command it runs (`Ejecutando un script de Python`, `Buscando en el código`, ...). `ctrl+o` still shows every command and its full output, and Claude Code's own grouped lines (`Ran 2 shell commands`) are left as they are. It only changes the terminal; the desktop app and VS Code draw as before.
+The dot shows the state: green when done, grey with `…` while it runs, red with `(falló)` when it errored, yellow with `(interrumpido)` when it was cut. A call with no `description` gets a label from the command it runs (`Ejecutando un script de Python`, `Buscando en el código`, ...). Claude Code's folded groups of read-only calls (`Reading 1 file…`, `Listed 1 directory`) that include a shell command are drawn the same way: one line per command, and the reads and searches in the group summed up in one line (`● 2 ficheros leídos · 1 búsqueda`), so no command, path or pattern shows. Groups with no shell command are left as Claude Code draws them, and `ctrl+o` still shows every command and its full output. It only changes the terminal; the desktop app and VS Code draw as before.
 
 #### Install
 

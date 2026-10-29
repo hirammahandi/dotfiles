@@ -105,3 +105,54 @@ test("the shell result block is hidden unless expanded", async ($, on) => {
   );
   await shown.unmount();
 });
+
+const group = (calls: ReadonlyArray<Record<string, unknown>>, isExpanded = false) =>
+  ({
+    plugin: "quiet-shell",
+    component: "ToolGroup",
+    requestId: "group_1",
+    surface: "terminal",
+    props: {
+      isActive: true,
+      isExpanded,
+      calls: calls.map((call, index) => ({
+        tool_use_id: `toolu_${index}`,
+        tool: "Bash",
+        input: {} as unknown,
+        isRunning: false,
+        isErrored: false,
+        isInterrupted: false,
+        ...call,
+      })),
+    },
+  }) as const;
+
+test("a folded group with a shell call draws descriptions, never the command", async ($, on) => {
+  engine(on);
+  const ui = await $.ui.mount(
+    group([
+      { input: { command: 'cat "a.txt"', description: "Read the notes file" }, isRunning: true },
+      { input: { command: "ls -la" } },
+      { tool: "Read", input: { file_path: "b.ts" } },
+      { tool: "Read", input: { file_path: "c.ts" } },
+      { tool: "Grep", input: { pattern: "foo" } },
+    ]),
+  );
+
+  expect(await ui.find({ type: "Text", text: /Read the notes file/ })).toBeDefined();
+  expect(await ui.find({ type: "Text", text: /Listando una carpeta/ })).toBeDefined();
+  expect(await ui.find({ type: "Text", text: /2 ficheros leídos · 1 búsqueda/ })).toBeDefined();
+  expect(await ui.find({ type: "Text", text: /cat |ls -la|engine/ })).toBeUndefined();
+  await ui.unmount();
+});
+
+test("groups without shell calls, or unfolded, are left to the engine", async ($, on) => {
+  engine(on);
+
+  for (const props of [group([{ tool: "Read", input: { file_path: "a.ts" } }]), group([{ input: { command: "ls" } }], true)]) {
+    const ui = await $.ui.mount(props);
+
+    expect((await ui.find({ type: "Text", text: /engine/ }))?.text).toBe("engine");
+    await ui.unmount();
+  }
+});
