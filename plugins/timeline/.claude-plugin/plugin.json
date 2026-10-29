@@ -1,0 +1,6 @@
+{
+  "name": "timeline",
+  "version": "0.1.0",
+  "description": "Right-side pane with the timeline of prompts sent in the conversation (as /rewind lists them) under a context-usage bar; /timeline toggles it.",
+  "author": { "name": "Hiram Hernandez" }
+}

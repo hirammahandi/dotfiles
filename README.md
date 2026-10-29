@@ -11,7 +11,8 @@ dotfiles/
 ├── .claude-plugin/
 │   └── marketplace.json            # makes the repo a Claude Code plugin marketplace
 ├── plugins/                        # Claude Code plugins, installed with /plugin (not a Stow package)
-│   └── quiet-shell/
+│   ├── quiet-shell/
+│   └── timeline/
 ├── install.sh                      # symlinks the skills into ~/.claude/skills
 └── claude/                         # package: Claude Code
     └── .claude/
@@ -53,6 +54,25 @@ Update with `claude plugin update quiet-shell@hirammahandi` and then `/reload-pl
 #### Develop
 
 `claude --plugin-dir ~/dotfiles/plugins/quiet-shell` loads the working copy for one session and reloads it on save. `claude plugin validate plugins/quiet-shell` checks it and `claude plugin test plugins/quiet-shell` runs its tests.
+
+### timeline
+
+A [mod](https://code.claude.com/docs/en/plugins/mods/overview) that keeps a pane open beside the conversation with:
+
+- **Context usage of the agent** at the top: the share of the context window in use, a bar that turns from green to yellow at 60% and red at 85%, and `91.2k / 200.0k tokens · $3.40` (tokens in the window and the session's cost so far).
+- **The timeline of your prompts** below it, numbered, newest first, as `/rewind` lists them: only what you typed, read from the session's own messages, so it follows `/rewind`, `/clear` and `/compact`. Tool results, system reminders, slash commands and interruptions are left out.
+
+It refreshes on every prompt, tool call, finished turn and slash command. The pane opens when a session starts, and `/timeline` closes or reopens it.
+
+The pane docks on the right only with the fullscreen renderer (`/tui fullscreen`); with the default renderer Claude Code opens panes inline above the prompt. Opened on its own at session start it waits until the terminal is at least 144 columns wide; `/timeline` opens it at any width.
+
+#### Install
+
+```
+/plugin install timeline --marketplace hirammahandi/dotfiles
+```
+
+Answer `y` if the marketplace is not added yet, then pick the user scope. Update with `claude plugin update timeline@hirammahandi` and `/reload-plugins`; remove with `claude plugin uninstall timeline@hirammahandi`. `claude plugin validate plugins/timeline` and `claude plugin test plugins/timeline` check a working copy.
 
 ## Skills
 
